@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoulFly — Rod Wave Album Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #111118;
+    --navy: #0d1b2a;
+    --smoke: #1a1a2e;
+    --gold: #c9a84c;
+    --amber: #e8b84b;
+    --cream: #f5edd6;
+    --muted: #8a8a9a;
+    --white: #f0ece0;
+    --red: #8b2020;
+    --wave: #1a3a5c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ——— NAV ——— */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ——— HERO ——— */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 0 6rem 5vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 40%, rgba(26,58,92,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 30% 70%, rgba(139,32,32,0.15) 0%, transparent 50%),
+      linear-gradient(170deg, #0a0a0a 0%, #0d1b2a 40%, #0a0a0a 100%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+  }
+
+  .hero-ornament {
+    position: absolute;
+    top: 15%;
+    right: 8%;
+    width: 380px;
+    height: 380px;
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 50%;
+    animation: pulse-ring 6s ease-in-out infinite;
+  }
+
+  .hero-ornament::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(201,168,76,0.08);
+    border-radius: 50%;
+  }
+
+  .hero-ornament::after {
+    content: '';
+    position: absolute;
+    inset: 45px;
+    border: 1px solid rgba(201,168,76,0.05);
+    border-radius: 50%;
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.04); opacity: 1; }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 14vw, 14rem);
+    line-height: 0.88;
+    letter-spacing: 4px;
+    color: var(--cream);
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+
+  .hero-title span {
+    display: block;
+    color: var(--gold);
+    font-size: 0.38em;
+    letter-spacing: 12px;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--muted);
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    opacity: 0;
+    animation: fadeUp 1s 0.8s forwards;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 3rem;
+    margin-top: 2.5rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 1s 1s forwards;
+  }
+
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .hero-meta-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .hero-meta-value {
+    font-size: 1rem;
+    color: var(--white);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 3rem;
+    writing-mode: vertical-rl;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    z-index: 1;
+  }
+
+  .scroll-cue::after {
+    content: '';
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scroll-line 1.5s ease-in-out infinite;
+  }
+
+  @keyframes scroll-line {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ——— SECTIONS ——— */
+  section {
+    padding: 7rem 5vw;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--cream);
+    margin-bottom: 3rem;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
+    margin: 0 5vw;
+  }
+
+  /* ——— RHETORICAL SITUATION ——— */
+  #rhetorical {
+    background: linear-gradient(160deg, var(--deep) 0%, var(--black) 100%);
+  }
+
+  .rhet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1200px;
+  }
+
+  .rhet-col p {
+    color: rgba(240,236,224,0.82);
+    margin-bottom: 1.4rem;
+    font-size: 1.08rem;
+  }
+
+  .rhet-col p:last-child { margin-bottom: 0; }
+
+  .pull-quote {
+    border-left: 3px solid var(--gold);
+    padding: 1.2rem 0 1.2rem 1.8rem;
+    margin: 2.5rem 0;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--cream);
+    line-height: 1.5;
+  }
+
+  .context-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-top: 3rem;
+    max-width: 1200px;
+  }
+
+  .context-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 4px;
+    padding: 1.6rem;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .context-card:hover {
+    border-color: rgba(201,168,76,0.35);
+    background: rgba(201,168,76,0.04);
+  }
+
+  .context-card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .context-card h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.7rem;
+  }
+
+  .context-card p {
+    font-size: 0.95rem;
+    color: rgba(240,236,224,0.75);
+    line-height: 1.6;
+  }
+
+  /* ——— LYRICAL ANALYSIS ——— */
+  #lyrics {
+    background: var(--black);
+  }
+
+  .song-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    max-width: 700px;
+  }
+
+  .song-tab {
+    padding: 1rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.3s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  .song-tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  .song-tab:hover { color: var(--cream); }
+
+  .song-panel { display: none; }
+  .song-panel.active { display: block; }
+
+  .song-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .song-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: rgba(201,168,76,0.15);
+    line-height: 1;
+  }
+
+  .song-title-block h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 2px;
+    color: var(--cream);
+    line-height: 1;
+  }
+
+  .song-title-block p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 0.4rem;
+  }
+
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
+    max-width: 1200px;
+  }
+
+  .analysis-section h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+  }
+
+  .analysis-section h4:first-child { margin-top: 0; }
+
+  .analysis-section p {
+    color: rgba(240,236,224,0.82);
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+  }
+
+  .lyric-excerpt {
+    background: rgba(201,168,76,0.04);
+    border-left: 3px solid rgba(201,168,76,0.35);
+    padding: 1rem 1.4rem;
+    margin: 1.2rem 0;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--cream);
+    line-height: 1.6;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .literary-device {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.1);
+    border-radius: 4px;
+    padding: 1.2rem 1.4rem;
+    margin: 1rem 0;
+  }
+
+  .literary-device .device-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+
+  .literary-device p {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+  }
+
+  /* ——— TRACKLIST ——— */
+  #tracklist {
+    background: linear-gradient(160deg, #0d1b2a 0%, var(--black) 100%);
+  }
+
+  .track-journey {
+    max-width: 900px;
+  }
+
+  .track-phase {
+    margin-bottom: 3rem;
+    position: relative;
+    padding-left: 2.5rem;
+  }
+
+  .track-phase::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: -2.5rem;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.1));
+  }
+
+  .track-phase:last-child::before {
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    bottom: 0;
+  }
+
+  .phase-dot {
+    position: absolute;
+    left: -5px;
+    top: 0.4rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 12px rgba(201,168,76,0.5);
+  }
+
+  .phase-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .phase-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--cream);
+    margin-bottom: 0.8rem;
+  }
+
+  .phase-tracks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .track-chip {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+    padding: 0.2rem 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    color: var(--cream);
+  }
+
+  .phase-analysis {
+    color: rgba(240,236,224,0.82);
+    font-size: 1.05rem;
+    max-width: 700px;
+  }
+
+  .tracklist-choices {
+    margin-top: 4rem;
+    max-width: 900px;
+  }
+
+  .choice-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: start;
+  }
+
+  .choice-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 3rem;
+    text-align: right;
+  }
+
+  .choice-text strong {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .choice-text p {
+    color: rgba(240,236,224,0.75);
+    font-size: 1rem;
+  }
+
+  /* ——— RATINGS ——— */
+  #ratings {
+    background: var(--black);
+  }
+
+  .ratings-container {
+    max-width: 900px;
+  }
+
+  .track-rating {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto auto;
+    gap: 0 1.5rem;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.2s;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 3px;
+    cursor: default;
+  }
+
+  .track-rating:hover {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .track-rating:last-child { border-bottom: none; }
+
+  .tr-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .tr-name {
+    font-size: 1.05rem;
+    color: var(--cream);
+  }
+
+  .tr-bar-wrap {
+    width: 180px;
+    height: 3px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .tr-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--amber));
+    border-radius: 2px;
+    transform-origin: left;
+    animation: bar-grow 1.2s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+    transform: scaleX(0);
+  }
+
+  @keyframes bar-grow {
+    to { transform: scaleX(1); }
+  }
+
+  .tr-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    min-width: 3rem;
+    text-align: right;
+  }
+
+  .overall-rating {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(201,168,76,0.02));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .or-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 6rem;
+    color: var(--gold);
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(201,168,76,0.3);
+  }
+
+  .or-text h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .or-text p {
+    color: rgba(240,236,224,0.75);
+    font-size: 1rem;
+    max-width: 500px;
+  }
+
+  /* ——— IMPACT ——— */
+  #impact {
+    background: linear-gradient(160deg, #0a0a0a 0%, #0d1b2a 50%, #0a0a0a 100%);
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1100px;
+    margin-bottom: 3rem;
+  }
+
+  .impact-block h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .impact-block p {
+    color: rgba(240,236,224,0.82);
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    max-width: 1100px;
+  }
+
+  .stat-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 4px;
+    padding: 1.4rem 2rem;
+    text-align: center;
+    min-width: 180px;
+  }
+
+  .stat-box .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-box .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    display: block;
+  }
+
+  .personal-note {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 4px;
+    padding: 2.5rem;
+    max-width: 1100px;
+    position: relative;
+  }
+
+  .personal-note::before {
+    content: '"';
+    position: absolute;
+    top: -1rem;
+    left: 2rem;
+    font-family: 'Crimson Pro', serif;
+    font-size: 5rem;
+    color: var(--gold);
+    line-height: 1;
+    opacity: 0.3;
+  }
+
+  .personal-note p {
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--cream);
+    max-width: 750px;
+  }
+
+  /* ——— FOOTER ——— */
+  footer {
+    padding: 3rem 5vw;
+    text-align: center;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ——— RESPONSIVE ——— */
+  @media (max-width: 768px) {
+    nav { padding: 1rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 5vw; }
+    .rhet-grid, .analysis-grid, .impact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .context-cards { grid-template-columns: 1fr; }
+    .tr-bar-wrap { width: 100px; }
+    .hero-meta { flex-wrap: wrap; gap: 1.5rem; }
+    .overall-rating { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .stat-row { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SoulFly</div>
+  <ul class="nav-links">
+    <li><a href="#rhetorical">Context</a></li>
+    <li><a href="#lyrics">Lyrics</a></li>
+    <li><a href="#tracklist">Tracklist</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#ratings">Ratings</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-ornament"></div>
+
+  <p class="hero-eyebrow">Album Analysis &nbsp;·&nbsp; 2021 &nbsp;·&nbsp; Alamo / Geffen / Interscope Records</p>
+
+  <h1 class="hero-title">
+    <span>Rod Wave</span>
+    SoulFly
+  </h1>
+
+  <p class="hero-sub">A man's soul in flight — from the streets of St. Petersburg to the top of the Billboard 200</p>
+
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Released</span>
+      <span class="hero-meta-value">March 26, 2021</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Genre</span>
+      <span class="hero-meta-value">Trap-Soul / R&amp;B</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Tracks</span>
+      <span class="hero-meta-value">19 (Standard)</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Peak</span>
+      <span class="hero-meta-value">#1 Billboard 200</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Scroll</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RHETORICAL SITUATION -->
+<section id="rhetorical">
+  <p class="section-label">Part One</p>
+  <h2 class="section-title">Rhetorical Situation</h2>
+
+  <div class="rhet-grid">
+    <div class="rhet-col">
+      <h4 style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">The Artist</h4>
+      <p>Rodarius Marcell Green — known to the world as Rod Wave — was born August 27, 1998, in St. Petersburg, Florida. His upbringing on the south side of the city, one of Florida's most economically divided areas, was defined by instability: his parents separated when he was in elementary school, and his father subsequently went to prison for six years, leaving the family to scramble financially.</p>
+      <p>Forced to navigate poverty alongside the absence of a father figure, young Rodarius turned to the streets as a teenager, accumulating juvenile record entries and a persistent fear that he'd never escape the cycle. He began singing in fifth grade but didn't pursue music seriously until high school. He graduated from Lakewood High School in 2017 and released his debut mixtape that same year.</p>
+      <p>By the time <em>SoulFly</em> arrived in 2021, Rod Wave was 22 years old — a self-made artist who had gone from street corners to national television in under four years, driven entirely by emotional honesty and a voice that sounds like it carries the weight of every experience he's lived.</p>
+
+      <div class="pull-quote">
+        "I feel like before music, I didn't really know what I wanted to do… Now, I'm making music and actually living life and being the one that people depend on. It gave me a reason to wake up."
+        <br><em style="font-size:0.85rem;color:var(--muted);">— Rod Wave, Billboard 2020</em>
+      </div>
+
+      <p>His stage name itself signals aspiration — he intended to make waves in the music industry, and by 2021, he had done exactly that. His first two albums had peaked at #10 and #2 on the Billboard 200 respectively. <em>SoulFly</em> would be the album where he finally reached the summit.</p>
+    </div>
+
+    <div class="rhet-col">
+      <h4 style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">Genre &amp; Tone</h4>
+      <p>Rod Wave is widely credited as a pioneer of <strong style="color:var(--cream);">trap-soul</strong> — a hybrid genre that fuses the moody 808-driven production of trap with the vulnerability, melody, and emotional depth of soul and R&amp;B. Where many of his rap contemporaries lean into bravado, Rod Wave builds his brand entirely on radical emotional transparency.</p>
+      <p>The tone of <em>SoulFly</em> is one of bittersweet endurance. It's not a victory lap and it's not a sob story — it's the complicated feeling of making it out while still carrying the scars of where you came from. Pride, grief, love, anxiety, and gratitude all share space on the same record.</p>
+
+      <h4 style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;margin-top:2rem;">World Context (2020–2021)</h4>
+      <p>The world that received <em>SoulFly</em> in March 2021 was emerging, bruised, from one of the most turbulent periods in modern American history. The COVID-19 pandemic had shuttered live music, accelerated streaming, and left millions of Americans isolated and searching for connection through art.</p>
+      <p>2020 had also been a year of heightened national reckoning with racial injustice — the murders of George Floyd, Breonna Taylor, and others sparked a widespread movement that gave new urgency to Black artists chronicling the psychic costs of growing up in under-resourced communities. Rod Wave's unflinching portrayal of that world — the missed calls that mean bad news, the fear every time his phone rings, the constant threat of losing people to the streets — arrived with profound context.</p>
+
+      <h4 style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;margin-top:2rem;">Core Message</h4>
+      <p>The title says it all. <em>SoulFly</em> is about liberation — the kind that only comes after surviving real pain. The album traces the journey from survival to transcendence, from street life to a life worth living, and ultimately toward the only true rest Rod Wave imagines: peace after death. It's an album about wanting to be remembered for being real, not just being successful.</p>
+    </div>
+  </div>
+
+  <div class="context-cards">
+    <div class="context-card">
+      <div class="context-card-icon">🎵</div>
+      <h4>Previous Work</h4>
+      <p>SoulFly followed <em>Pray 4 Love</em> (2020), which peaked at #2 and included "Rags2Riches." This third album represented Rod Wave's most ambitious and fully realized statement to date.</p>
+    </div>
+    <div class="context-card">
+      <div class="context-card-icon">🌍</div>
+      <h4>Pandemic Release</h4>
+      <p>Released during the final months of widespread pandemic lockdowns, SoulFly tapped into a national mood of grief, resilience, and searching for meaning — reaching listeners who were unusually hungry for genuine emotional connection.</p>
+    </div>
+    <div class="context-card">
+      <div class="context-card-icon">📻</div>
+      <h4>TikTok &amp; Streaming Era</h4>
+      <p>"Heart on Ice" (2019) had gone viral on TikTok, introducing Rod Wave to millions of young listeners. By 2021, his audience was primed and enormous — SoulFly racked up 189.2 million on-demand streams in its first week.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- LYRICAL ANALYSIS -->
+<section id="lyrics">
+  <p class="section-label">Part Two</p>
+  <h2 class="section-title">Lyrical Analysis</h2>
+
+  <div class="song-tabs">
+    <button class="song-tab active" onclick="switchSong('tombstone', this)">Tombstone</button>
+    <button class="song-tab" onclick="switchSong('street', this)">Street Runner</button>
+  </div>
+
+  <!-- TOMBSTONE -->
+  <div class="song-panel active" id="panel-tombstone">
+    <div class="song-header">
+      <div class="song-number">05</div>
+      <div class="song-title-block">
+        <h3>Tombstone</h3>
+        <p>Track 5 &nbsp;·&nbsp; 2:40 &nbsp;·&nbsp; The Breakout Single</p>
+      </div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-section">
+        <h4>Overview &amp; Setup</h4>
+        <p>"Tombstone" is built on a skeletal 808 bass pattern that creates a feeling of emptiness — like standing in a vast, open field with nowhere to hide. That sonic choice is intentional: Rod Wave is confronting mortality directly, and the production refuses to let the listener feel comfortable.</p>
+        <p>The song opens with Rod facing the hardest parts of life in the streets: the ever-present fear of bad news, the pressure of providing for family, and the exhaustion of constantly looking over his shoulder.</p>
+
+        <div class="lyric-excerpt">
+          "My phone say seven missed calls, I know it's bad news / This life had left me so scarred / I keep my gun in my drawers, duckin' the sad news"
+        </div>
+
+        <h4>Verse Development</h4>
+        <p>The first verse establishes the stakes: survival in an environment where violence is an ever-present threat and bad news arrives without warning. Rod Wave builds tension with specific, grounded imagery rather than abstractions — missed calls, hiding a weapon, running from authority. These aren't metaphors; they are the literal texture of his daily life.</p>
+        <p>The second verse shifts into the complicated dynamics of relationships under pressure — a partner who wants connection, a man whose focus must stay on securing his family's future. Rod acknowledges the tension without apologizing for it, showing the cost that street life and hustle exact on intimacy.</p>
+
+        <h4>The Chorus</h4>
+        <p>The chorus is where the song becomes truly arresting. Over a gospel choir (a production choice that cannot be overstated in significance), Rod Wave delivers what amounts to his own epitaph:</p>
+
+        <div class="lyric-excerpt">
+          "On my tombstone when they bury me / By the river, they will carry me / Finally, I'll be restin' in peace"
+        </div>
+
+        <p>The word <em>finally</em> is doing an enormous amount of work here. It frames death not as tragedy but as relief — the ultimate release from a life lived under constant pressure. The gospel choir transforms what could be a morbid sentiment into something approaching spiritual longing. Rod Wave doesn't want to die; he wants the peace that death represents but that life has never given him.</p>
+
+        <h4>The Outro — A Shift in Register</h4>
+        <p>The outro pulls back the curtain further — Rod directly addresses posthumous fame, the phenomenon of artists being celebrated only after death. His concern isn't about legacy for legacy's sake; it's a protest against a culture that refuses to appreciate people while they're alive.</p>
+
+        <div class="lyric-excerpt">
+          "Make sure they write the truest in the motherf***in' game / On my tombstone when they bury me"
+        </div>
+      </div>
+
+      <div class="analysis-section">
+        <h4>Literary Devices</h4>
+
+        <div class="literary-device">
+          <div class="device-name">Extended Metaphor — The Tombstone</div>
+          <p>The tombstone functions throughout the song as a metaphor for legacy, identity, and the desire to be known truthfully. Rod Wave isn't writing about a literal grave marker; he's writing about how a person is remembered and reduced to a few words after a lifetime of complexity. By centering this image, he challenges us to consider whether we truly see the people around us before it's too late.</p>
+        </div>
+
+        <div class="literary-device">
+          <div class="device-name">Juxtaposition — Street Life vs. Spiritual Peace</div>
+          <p>The production pairs violent, street-based imagery (guns, missed calls, running from authorities) with explicitly spiritual and gospel elements (the choir, the river imagery of baptism, the language of rest and peace). This juxtaposition is the heart of the song's meaning: Rod Wave exists simultaneously in a world of danger and a world of spiritual longing. The two are inseparable in his experience.</p>
+        </div>
+
+        <div class="literary-device">
+          <div class="device-name">Allusion — "By the River"</div>
+          <p>The image of being "carried by the river" alludes to both African American spiritual traditions (rivers as pathways to freedom, as in the Underground Railroad) and Christian baptism imagery. It places Rod Wave's personal story within a much larger historical and spiritual context of Black Americans seeking freedom and peace.</p>
+        </div>
+
+        <h4>Album Contribution</h4>
+        <p>"Tombstone" is the philosophical spine of <em>SoulFly</em>. While other songs address specific topics (relationships, money, trauma), this track asks the album's deepest question: <em>what does any of it mean if you don't survive long enough to know peace?</em> It's the song that gives the album its title its fullest meaning — the soul, finally, free to fly.</p>
+
+        <p>Critically, it was performed on <em>The Tonight Show Starring Jimmy Fallon</em> on April 8, 2021 — Rod Wave's national TV debut — introducing this deeply personal vision to a mainstream audience.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STREET RUNNER -->
+  <div class="song-panel" id="panel-street">
+    <div class="song-header">
+      <div class="song-number">08</div>
+      <div class="song-title-block">
+        <h3>Street Runner</h3>
+        <p>Track 8 &nbsp;·&nbsp; 4:12 &nbsp;·&nbsp; Lead Single</p>
+      </div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-section">
+        <h4>Overview &amp; Setup</h4>
+        <p>"Street Runner" is the album's lead single — the first song released ahead of <em>SoulFly</em> — and it opens with a sampled interpolation from Ruth B.'s "Mixed Signals," a melancholy indie-folk track about romantic ambiguity. That choice immediately signals Rod Wave's emotional range: this is a song about love that has become complicated by a lifestyle that leaves little room for it.</p>
+        <p>At 4:12, it's one of the album's longer tracks, and it earns that runtime through a slow, patient construction of emotional complexity. Where "Tombstone" is about surviving the streets, "Street Runner" is about what the streets cost in terms of the relationships you most want to hold onto.</p>
+
+        <div class="lyric-excerpt">
+          "These mixed signals, mixed signals, they're killin' me / I don't know what you want, but I know what I need"
+        </div>
+
+        <h4>Verse Development</h4>
+        <p>The opening verse places the listener in the middle of a fractured relationship where physical distance mirrors emotional distance. Rod Wave is constantly moving — city to city, stage to stage — and the woman he loves is left behind, uncertain of her place in a life that has no room to slow down.</p>
+        <p>The second verse escalates the tension. Rod Wave shifts from simply describing the situation to interrogating his own role in it. His inability to fully give himself to a relationship isn't framed as selfishness but as a symptom of the environment he came from — where trusting people fully could get you hurt, and where keeping your guard up was a survival skill that never quite switches off.</p>
+
+        <h4>The Chorus</h4>
+        <p>The chorus circles back to the sampled theme of mixed signals, but with Rod Wave's characteristic twist — he acknowledges the mixed signals aren't just coming from his partner. He's sending them too. He wants closeness but can't stop running. The chorus is a confession as much as a complaint:</p>
+
+        <div class="lyric-excerpt">
+          "I don't know what you want, but I know what I need / Out here in these streets, I'm a street runner / Streets keep callin' me"
+        </div>
+      </div>
+
+      <div class="analysis-section">
+        <h4>Literary Devices</h4>
+
+        <div class="literary-device">
+          <div class="device-name">Personification — The Streets</div>
+          <p>"The streets keep calling me" is a form of personification that transforms an abstract environment into an active, seductive force. The streets aren't just a place Rod Wave came from; they're something that claims him, calls to him, competes with the people he loves for his attention and loyalty. This makes the conflict feel tragic rather than simply irresponsible.</p>
+        </div>
+
+        <div class="literary-device">
+          <div class="device-name">Intertextual Sampling — Ruth B.</div>
+          <p>The deliberate use of Ruth B.'s "Mixed Signals" as the song's sonic foundation is itself a literary device — intertextuality. By borrowing the emotional atmosphere of a soft, indie-folk track about romantic confusion, Rod Wave places his trap-soul song in conversation with a completely different genre and audience. It signals that the pain of mixed signals is universal, regardless of genre, background, or circumstance. It also adds layers of meaning for listeners who recognize the source material.</p>
+        </div>
+
+        <div class="literary-device">
+          <div class="device-name">Anaphora — Repetition of "These Mixed Signals"</div>
+          <p>The repetition of the phrase "mixed signals" throughout the song functions as anaphora — a rhetorical device that builds emotional weight through structured repetition. Each return to the phrase lands differently as the song's context deepens, moving from frustration to self-awareness to something approaching grief.</p>
+        </div>
+
+        <h4>Album Contribution</h4>
+        <p>As the lead single and the album's midpoint, "Street Runner" is the emotional anchor of <em>SoulFly</em>. It's the song that most directly addresses the cost of success — not in material terms but in relational ones. Positioned at track 8 of 19, it functions as a hinge point: everything before it builds toward this moment of romantic reckoning, and everything after it examines what it means to keep moving even when you've been emotionally opened up. It's the album's most commercially successful track and its most emotionally honest one simultaneously.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TRACKLIST LINE OF REASONING -->
+<section id="tracklist">
+  <p class="section-label">Part Three</p>
+  <h2 class="section-title">Tracklist Line of Reasoning</h2>
+
+  <div class="track-journey">
+
+    <div class="track-phase">
+      <div class="phase-dot"></div>
+      <div class="phase-label">Movement I — Tracks 1–4</div>
+      <div class="phase-title">Grounding in Pain</div>
+      <div class="phase-tracks">
+        <span class="track-chip">SoulFly</span>
+        <span class="track-chip">Gone Till November</span>
+        <span class="track-chip">Blame on You</span>
+        <span class="track-chip">Don't Forget</span>
+      </div>
+      <p class="phase-analysis">The album opens with the title track, which functions as a thesis statement: Rod Wave declares that despite his commercial success, the pain never fully goes away — but he's made peace with that. "Gone Till November" immediately shifts to the cost of the touring life on personal relationships. "Blame on You" digs into accountability and the difficulty of trusting people who've let you down. "Don't Forget" (which samples Pimp C and parallels a Benny the Butcher track) is a direct plea to the culture not to lose the roots of what makes music meaningful. These four tracks plant the album firmly in Rod Wave's lived reality before anything else is explored.</p>
+    </div>
+
+    <div class="track-phase">
+      <div class="phase-dot"></div>
+      <div class="phase-label">Movement II — Tracks 5–7</div>
+      <div class="phase-title">Reckoning with Mortality and Success</div>
+      <div class="phase-tracks">
+        <span class="track-chip">Tombstone</span>
+        <span class="track-chip">All I Got</span>
+        <span class="track-chip">Richer (ft. Polo G)</span>
+      </div>
+      <p class="phase-analysis">"Tombstone" arrives at track 5, the album's philosophical core. Its placement here — before the big commercial single — is intentional. Rod Wave wants you to understand the stakes before you hear the hook. "All I Got" follows as a more grounded reflection on having very little before music arrived. Then "Richer" — the album's only feature on the standard version — celebrates the come-up with Polo G, but even this celebration is shadowed by the awareness of how fragile success is. This three-track sequence is the album's darkest and most introspective pocket.</p>
+    </div>
+
+    <div class="track-phase">
+      <div class="phase-dot"></div>
+      <div class="phase-label">Movement III — Tracks 8–12</div>
+      <div class="phase-title">Love, Flex, and the World Outside</div>
+      <div class="phase-tracks">
+        <span class="track-chip">Street Runner</span>
+        <span class="track-chip">Pills &amp; Billz</span>
+        <span class="track-chip">How the Game Go</span>
+        <span class="track-chip">Shock da World</span>
+        <span class="track-chip">What's Love??</span>
+      </div>
+      <p class="phase-analysis">The album's midsection represents a tonal shift — not a lightening exactly, but a widening of perspective. "Street Runner" opens this section with relational pain; "Pills & Billz" and "How the Game Go" bring more street-level observation. "Shock da World" is one of the album's more defiant, upward-looking tracks. "What's Love??" adds complexity by questioning even the relationships that feel most stable. Rod Wave uses this stretch to show all the competing demands on his attention and energy.</p>
+    </div>
+
+    <div class="track-phase">
+      <div class="phase-dot"></div>
+      <div class="phase-label">Movement IV — Tracks 13–19</div>
+      <div class="phase-title">Resolution and Release</div>
+      <div class="phase-tracks">
+        <span class="track-chip">OMDB</span>
+        <span class="track-chip">Invisible Scar</span>
+        <span class="track-chip">Calling</span>
+        <span class="track-chip">Sneaky Links</span>
+        <span class="track-chip">Believe Me</span>
+        <span class="track-chip">Moving On</span>
+        <span class="track-chip">Changing</span>
+      </div>
+      <p class="phase-analysis">"OMDB" (which samples Drake's "Over My Dead Body") is a defensive, guarded track — Rod Wave shutting out the noise of critics and doubters. From here, the album moves steadily toward emotional resolution. "Invisible Scar" and "Calling" revisit trauma with more acceptance. "Sneaky Links" offers a rare moment of levity. "Believe Me" and "Moving On" do exactly what their titles say — push toward the future. The closer "Changing" completes the arc: Rod Wave acknowledging that he is not the same person he was, and that growth, while painful, is the only real response to everything that came before. It's a gentle, intentional landing after an emotionally turbulent flight.</p>
+    </div>
+
+  </div>
+
+  <div class="tracklist-choices">
+    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--cream);letter-spacing:2px;margin-bottom:2rem;">Key Artistic Choices</h3>
+
+    <div class="choice-item">
+      <div class="choice-num">01</div>
+      <div class="choice-text">
+        <strong>Title Track Opens the Album</strong>
+        <p>Placing "SoulFly" at track 1 rather than the end (where album-title tracks often land) signals that the central thesis — the soul in flight, seeking freedom — must be established first, before any specific story is told. Everything that follows is evidence for that opening claim.</p>
+      </div>
+    </div>
+
+    <div class="choice-item">
+      <div class="choice-num">02</div>
+      <div class="choice-text">
+        <strong>"Tombstone" Before the Single</strong>
+        <p>The album's deepest, most spiritually heavy track arrives before its most commercially appealing one. Rod Wave doesn't want you to stream your favorite and leave — he wants you to sit with mortality before you get to love and street life. The ordering insists on depth before surface.</p>
+      </div>
+    </div>
+
+    <div class="choice-item">
+      <div class="choice-num">03</div>
+      <div class="choice-text">
+        <strong>One Feature (Standard Edition)</strong>
+        <p>With only Polo G featured on the standard 19-track album, Rod Wave deliberately keeps this as a personal statement. Guest verses inherently bring another energy and perspective into the room; limiting them to one track ensures the album reads as a singular, unified confession rather than a collaborative showcase.</p>
+      </div>
+    </div>
+
+    <div class="choice-item">
+      <div class="choice-num">04</div>
+      <div class="choice-text">
+        <strong>"Changing" as the Closer</strong>
+        <p>Ending on "Changing" — a soft, reflective track about personal growth — is a statement of humility. For an artist who could have ended on a triumphant flex, choosing to close on quiet transformation says: the real victory is becoming someone better, not just someone bigger.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- IMPACT / LEGACY -->
+<section id="impact">
+  <p class="section-label">Part Four</p>
+  <h2 class="section-title">Album Impact &amp; Legacy</h2>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <span class="stat-val">#1</span>
+      <span class="stat-label">Billboard 200</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-val">189.2M</span>
+      <span class="stat-label">First-week streams</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-val">130K</span>
+      <span class="stat-label">First-week units</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-val">14/19</span>
+      <span class="stat-label">Tracks on Hot 100</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-val">#7</span>
+      <span class="stat-label">The Atlantic AOTY 2021</span>
+    </div>
+  </div>
+
+  <div class="impact-grid">
+    <div class="impact-block">
+      <h4>Reception at Release</h4>
+      <p><em>SoulFly</em> debuted at number one on the US Billboard 200 chart in April 2021, marking Rod Wave's first number-one album and logging the largest streaming week for any R&B/hip-hop album at that point in the year. Billboard's Jason Lipshutz called it Rod Wave's "most authoritative project to date." The Fader described it as "something like an intense conversation" in which Wave makes "his heart's concerns sound universal."</p>
+      <p>Critical reception was largely positive, with reviewers praising Rod Wave's vocals and lyrical sincerity. Some critics noted the album's length and tonal consistency as potential weaknesses for casual listeners, but the album's fanbase disagreed emphatically — connecting deeply to the album's unrelenting emotional honesty.</p>
+    </div>
+    <div class="impact-block">
+      <h4>Lasting Impact on the Genre</h4>
+      <p><em>SoulFly</em> cemented Rod Wave's role as a defining architect of trap-soul — a genre that has since exploded in influence. His template of pairing trap production with R&amp;B vulnerability and confessional lyricism has been widely imitated, but rarely replicated with the same authenticity. The album proved that commercial success and emotional depth were not opposites in hip-hop — you could have both.</p>
+      <p>The album also demonstrated the power of TikTok-era virality harnessed into album-level artistry. Rod Wave wasn't just a singles artist; he was building whole emotional worlds that reward full listens. In a streaming era that increasingly rewards individual tracks, <em>SoulFly</em> made a compelling case for the album as a complete artistic statement.</p>
+    </div>
+    <div class="impact-block">
+      <h4>Critical Legacy Over Time</h4>
+      <p><em>SoulFly</em> was ranked the seventh best album of 2021 by The Atlantic — notable recognition from a publication not typically focused on hip-hop. AllMusic's Andy Kellman praised the "sincerity" that has become Rod Wave's signature. Apple Music named it the most pre-saved album on the platform for two consecutive weeks prior to release.</p>
+      <p>In the years since, <em>SoulFly</em> has been recognized as the moment Rod Wave graduated from promising voice to generational talent. It remains his most defining artistic statement and is the album most often cited when people discuss why Rod Wave matters.</p>
+    </div>
+    <div class="impact-block">
+      <h4>Why This Album</h4>
+      <p><em>SoulFly</em> resonates because it is an album about surviving without pretending that surviving is enough. Rod Wave refuses the false binary of either celebrating success or wallowing in trauma — instead, he holds both at the same time, which is the most honest representation of what it means to come from very little and somehow make it somewhere.</p>
+      <p>In an era when vulnerability in hip-hop is sometimes performed rather than felt, Rod Wave's version sounds irrefutably lived-in. Every missed call that might be bad news, every relationship strained by absence, every moment of exhausted longing for peace — it all has the texture of real experience. That's rare. And that's why <em>SoulFly</em> endures.</p>
+    </div>
+  </div>
+
+  <div class="personal-note">
+    <p>What makes <em>SoulFly</em> stay with you isn't any single moment — it's the cumulative weight of 19 tracks that never once pretend things are simpler than they are. Rod Wave doesn't resolve his pain by the end of the album. He just decides to keep moving anyway. That choice, more than any chart position, is what makes this record matter.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RATINGS -->
+<section id="ratings">
+  <p class="section-label">Part Five</p>
+  <h2 class="section-title">Track Ratings</h2>
+
+  <div class="ratings-container">
+    <div id="track-list"></div>
+
+    <div class="overall-rating">
+      <div class="or-number">8.1</div>
+      <div class="or-text">
+        <h3>Overall Album Rating</h3>
+        <p>SoulFly is a cohesive, emotionally generous record held together by one of the most distinctive voices in contemporary hip-hop. Its consistency is both a strength and, for some listeners, a limitation — but for those who connect to Rod Wave's emotional register, it is nearly without flaw. A landmark album of its era.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>SoulFly — Rod Wave &nbsp;·&nbsp; Album Analysis &nbsp;·&nbsp; Released March 26, 2021</p>
+</footer>
+
+<script>
+  // Song tab switching
+  function switchSong(id, btn) {
+    document.querySelectorAll('.song-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.song-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Track ratings data
+  const tracks = [
+    { num: 1, name: "SoulFly", score: 9.0 },
+    { num: 2, name: "Gone Till November", score: 7.8 },
+    { num: 3, name: "Blame on You", score: 7.5 },
+    { num: 4, name: "Don't Forget", score: 8.2 },
+    { num: 5, name: "Tombstone", score: 9.5 },
+    { num: 6, name: "All I Got", score: 8.0 },
+    { num: 7, name: "Richer (ft. Polo G)", score: 8.3 },
+    { num: 8, name: "Street Runner", score: 9.2 },
+    { num: 9, name: "Pills & Billz", score: 7.4 },
+    { num: 10, name: "How the Game Go", score: 7.2 },
+    { num: 11, name: "Shock da World", score: 8.1 },
+    { num: 12, name: "What's Love??", score: 7.6 },
+    { num: 13, name: "OMDB", score: 8.0 },
+    { num: 14, name: "Invisible Scar", score: 8.4 },
+    { num: 15, name: "Calling", score: 7.9 },
+    { num: 16, name: "Sneaky Links", score: 7.3 },
+    { num: 17, name: "Believe Me", score: 7.7 },
+    { num: 18, name: "Moving On", score: 8.2 },
+    { num: 19, name: "Changing", score: 8.6 },
+  ];
+
+  const container = document.getElementById('track-list');
+  tracks.forEach((t, i) => {
+    const pct = (t.score / 10) * 100;
+    const delay = i * 60;
+    container.innerHTML += `
+      <div class="track-rating">
+        <div class="tr-num">${String(t.num).padStart(2,'0')}</div>
+        <div class="tr-name">${t.name}</div>
+        <div class="tr-bar-wrap">
+          <div class="tr-bar" style="width:${pct}%;animation-delay:${delay}ms"></div>
+        </div>
+        <div class="tr-score">${t.score.toFixed(1)}</div>
+      </div>
+    `;
+  });
+
+  // Intersection observer for bar animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.tr-bar').forEach(bar => {
+          bar.style.animationPlayState = 'running';
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.tr-bar').forEach(b => {
+    b.style.animationPlayState = 'paused';
+  });
+
+  setTimeout(() => {
+    const ratingSection = document.getElementById('ratings');
+    if (ratingSection) observer.observe(ratingSection);
+  }, 100);
+</script>
+</body>
+</html>
